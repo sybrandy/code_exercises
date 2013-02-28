@@ -32,10 +32,9 @@ void main(string[] args)
     writeln("Words: ", index.dim);
 
     ubyte[16] digest;
-    auto hash = new MD5Digest();
     foreach (s; File(args[1]).byLine().filter!(a => a != ""))
     {
-        digest = hash.digest(s);
+        digest = md5Of(s);
         uint idx = (
                     (digest[0] << 24) |
                     (digest[1] << 16) |
