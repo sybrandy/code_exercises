@@ -1,8 +1,8 @@
 import std.algorithm;
 import std.bitmanip;
+import std.digest.md;
 import std.exception;
 import std.file;
-import std.md5;
 import std.stdio;
 
 void main(string[] args)
@@ -32,12 +32,10 @@ void main(string[] args)
     writeln("Words: ", index.dim);
 
     ubyte[16] digest;
-    MD5_CTX context;
+    auto hash = new MD5Digest();
     foreach (s; File(args[1]).byLine().filter!(a => a != ""))
     {
-        context.start();
-        context.update(s);
-        context.finish(digest);
+        digest = hash.digest(s);
         uint idx = (
                     (digest[0] << 24) |
                     (digest[1] << 16) |
