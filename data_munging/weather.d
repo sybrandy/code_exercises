@@ -1,11 +1,9 @@
 import std.algorithm : map, filter;
 import std.array : split;
 import std.conv : parse;
-import std.regex : match, regex;
 import std.stdio : writefln, File;
+import std.string : isNumeric;
 import diff;
-
-auto numRegex = regex(`\d+`);
 
 void main()
 {
@@ -13,7 +11,7 @@ void main()
     File("weather.dat").byLine()
             .map!(a => a.split())
             .filter!(a => a.length >= 14)
-            .filter!(a => !match(a[0], numRegex).empty)
+            .filter!(a => isNumeric(a[0]))
             .map!(a => Record!(uint)(parse!uint(a[0]), parse!uint(a[1]), parse!uint(a[2])))
             .findMinDiff(rec);
     writefln("Day %d, spread %d", rec.id, rec.diff);
