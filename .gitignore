@@ -1,4 +1,5 @@
 *
 !.gitignore
+!*.mkdn
 !*/
 !*/*.d

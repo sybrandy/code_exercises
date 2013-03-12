@@ -1,0 +1,395 @@
+# Revew of Code Katas
+
+This is just an informal, personal review of the Katas that I have done.  I
+will go over what I liked and didn't like for each as well as any other
+thoughts I had.  This is meant to be an honest review.
+
+One thing to note: none of the code is truly production ready.  I did this as
+an informal exercise, therefore there's a chance that it will fall down if
+used in production if, for some reason, someone decides to do so.
+
+## Implementation notes
+
+* All of these are done in using the D Programming Language.  This was for no
+  other reason that I enjoy working in this language even though I typically
+  work in Java for work.  Granted, it's not perfect, but I just enjoy it more
+  and there are some very nice benefits to the language.
+* No external libraries were used.  I only used the standard libraries.
+* Some of the interfaces are done in the way the kata specified vs. how I
+  may have done things.  The Dependencies kata is a good example of this as I
+  created a struct just to contain methods and an array of dependencies so
+  that the add/get methods are called as such: deps.get('A');
+
+## General Observations
+
+* Probably because I used to do a lot of database work, I tend to rely on
+  filtering a lot.  I haven't investigated any alternatives, but I suspect
+  there may be.  Not saying that they're better or worse than filtering as I
+  simply do not know yet.
+* The standard library for D has been very useful, especially std.algorithm,
+  which contains the map, filter, uniq, and sort methods amongst others.
+* The new syntax for lamdas is very nice and easy to use.  E.g.: `a => a.foo`
+  or `(a,b) => a.equals(b)`
+
+## Katas
+
+### ANAGRAMS
+
+This was a very simple kata where the goal was to find all of the words that
+are anagrams to each other.  To do this, I created a dictionary to store the
+words with a key that consists of the sorted letters in each word.  For
+example, if the word is "dog", then it would be stored with the key "dgo".
+Then, when the word "god" appears, it will be associated with the same key.
+So, to get the anagrams for a specific word, I simply generate a key and
+retrieve the words associated with the key.  For further normalization, I
+ignored words in the wordlist with a single quote in them and lower-cased the
+keys.
+
+Because there may be multiple instances of the same exact word in the
+dictionary due to case, I have a second associative array which holds all of
+the words.  If the lower-case version of the word is already in the array,
+then I don't process it.  Otherwise, I add it to the anagrams.
+
+At this point, I see one thing I'd like to change: instead of lower-casing the
+words when I use them, it would be better to have used a map with the filters
+to lower-case the words as I read them in.  This way, I only lower-case the
+words once vs. 1-3 times.
+
+The rest of the program looks to see how many anagrams exist in the dictionary
+as well as the longest set of anagrams and prints them out.
+
+### BINARY_CHOP
+
+In this kata, the goal was to create 5 different versions of the binary
+search algorithm.  I ended up creating six.  Before we get into the algorithms
+themselves, I want to talk about how I tested them.  Because all of the
+algorithms would have the same interface, I created a single test function and
+passed in the search function as a parameter.  Not a realistic scenario since
+normally you don't put several versions of the same algorithm in the same
+file/class/whatever, but it did cut down significantly on the amount of code
+that needed to be written.
+
+The first version is a simple iterative version that "loops" over the array of
+data searching for the value.  Nothing of note here except that one change
+that could have been made is to move the check to see if the index is the last
+index into the condition of the loop.
+
+The second version is a standard recursive version where we search for a value
+between a start and end pair of indices.  This recursive version would work in
+any language as it leaves the array intact.
+
+The third version is another recursive version, but instead of passing in a
+start and end index, it simply calls itself with a subset of the data.  It's a
+bit simpler than the previous version because there was no need to write a
+second function to handle the start and end indices, however the logic is a
+bit more complicated since I had to keep in mind to calculate the actual index
+in the array since the slices start at 0 in the new call.
+
+The next two versions are a bit silly as they create and call new
+Fibers/Threads each time a match is not found.  It was a good exercise in use
+these, however the implementation is silly and slow.
+
+The sixth version is more interesting as it leverages message passing to do
+the work.  It only sends one message and the spawnChop function is the same
+one used in the first version, however it was useful to show how this could be
+done.  If nothing else, the algorithm can be called asynchronously.
+
+As for benchmarks, which I did out of curiosity, the results of a run are
+below:
+
+* Bench1: 15
+* Bench2: 22
+* Bench3: 20
+* Bench4: 483361
+* Bench5: 4628804
+* Bench6: 377949
+
+The names reflect the versions of the algorithms.  As one can see, 4 and 5 are
+lousy implementations.  Version 6 can be improved if the function was spawned
+once vs. every time the method was called.  Versions 1-3 are consistently the
+fastest and from the initial benchmarks, using array of 1,000,000 integers,
+all appear to be acceptable solutions.  Memory may become an issue with the
+recursive versions, but that can be remedied pretty easily using pass by
+reference vs. pass by value.  Also, the 6th benchmark is slow, but by spawning
+the search function once vs. many times, this should be much faster.
+
+Overall, this was a fun exercise.  I may come back to it later to try to
+improve some of the algorithms as benchmarking is fun.
+
+### BLOOM_FILTER
+
+This was another fun exercise.  First, though not part of the actual
+challenge, D lets you perform a word-count on a file with only one word per
+line using one line of code:
+
+    size_t wc = reduce!((a, b) => a + b)(0, File(args[1]).byLine().filter!(a => a != "").map!(a => 1));
+
+Needless to say, it's pretty slick.  Anyway, the reason for this was to
+determine the number of words so that the number of bits needed for the filter
+would be large enough.  The size of the BitArray used was calculated as
+follows:
+
+    (2 ^^ size) - 1
+
+After some experimentation, when done, it appears that increasing the number
+of size of the exponent by  adding 3 made the ratio set elements to the size
+of the bit array much better.
+
+Following the advice of someone else who completed this kata, I used the MD5
+algorithm to generate the hashes for the words and used the first 32-bits to
+generate the index.
+
+The rest of the program generates 100 random 5 letter words and checks to see
+if they are exist or not.  It also checks the original dictionary to verify
+that the word is a real word.  The final result is the number of hits against
+the filter as well as the number of false positives.
+
+### CONCAT_WORDS
+
+In this kata, the goal was to create three versions of same algorithm to
+concatenate 2, 3, and 4 letter words into real 6 letter words.  One version is
+supposed to be readable, one version is supposed to be fast, and the other is
+supposed to be flexible.  The purpose was to compare and contrast each
+solution.
+
+The first solution is the readable one where I mostly used standard language
+constructs to create a solution.  The performance isn't the best, but it does
+work well.
+
+The second solution is the fastest.  The largest speedup is due to the fact
+that the different words are broken out into different associative arrays
+based on size.  Then, each possible pairing (2 chars and 4 chars, 3 chars and
+3 chars, 4 chars and 2 chars) are checked using two loops: one fir 3 char
+words only and the other checks both permutations of 2 and 4 char words per
+iteration.  Other attempts to speed it up were tried, but this version appears
+to be the fastest possible.
+
+Lastly was the extensible version.  It uses a combination of techniques from
+the two previous versions to try to have it be relatively fast, but also
+flexible.  The flexibility comes to play when you pass in a word size and it
+will gather all of the words that are at least 2 characters in size to at most
+the size of the word minus 2 characters in size.  Then, it goes over all of
+the possible combinations, and I mean all, to see if the new word is legit.
+
+Here are the benchmarks:
+
+* Bench1: 32140
+* Bench2: 4048
+* Bench3: 63918
+
+As one can see, the most flexible version is the least efficient.  In
+retrospect, a stack or similar could be used to cut down on the number of
+words that get checked per iteration, but not 100% sure how much that would
+save.  Perhaps this is an exercise for another time.
+
+Regardless, this shows that the more you can tailor your solution to the
+problem, the better your performance can be.  In this case, since I knew what
+the word sizes would be, I could make some assumptions with respect to the
+algorithm to improve performance which, in this case, is pretty significant
+even if you discount the third version.
+
+### DATA_MUNGING
+
+This was a two-part kata where two different solutions were created and then
+refactored to leverage as much code between the two as possible.  In D, this
+was actually very simple since most of the logic leveraged built-in libraries,
+so there was only really one method that had to be abstracted out plus one
+data structure.
+
+I'm particularly proud of this kata because it fit in very nicely with
+[component programming](http://www.drdobbs.com/article/print?articleId=240008321&siteSectionName=architecture-and-design).
+The beauty of this is that it creates very concise code that, if the methods
+are named correctly, is quite readable.  Below is the core code for each
+program, one for football (soccer) data and the other for weather data.
+
+    Record!(string) rec;
+    File("football.dat").byLine()
+            .map!(a => a.split())
+            .filter!(a => a.length == 10)
+            .filter!(a => isNumeric(a[0]))
+            .map!(a => Record!(string)(a[1].idup, parse!int(a[6]), parse!int(a[8])))
+            .findMinDiff(rec);
+    writefln("Team %s, Spread %d", rec.id, rec.diff);
+
+***
+
+    Record!(uint) rec;
+    File("weather.dat").byLine()
+            .map!(a => a.split())
+            .filter!(a => a.length >= 14)
+            .filter!(a => isNumeric(a[0]))
+            .map!(a => Record!(uint)(parse!uint(a[0]), parse!uint(a[1]), parse!uint(a[2])))
+            .findMinDiff(rec);
+    writefln("Day %d, spread %d", rec.id, rec.diff);
+
+The only real differences between the two is how we determine if it's a line
+we care about (the two filters) and the data we extract (The last map line).
+Both versions are very clean and concise, especially since each line performs
+a different function.
+
+The only aspect of this code that is unknown is whether this is also an
+efficient solution.  The data set was very small, so no benchmarks were
+performed.  It may be interesting to see how this would work with a larger
+data set vs. more custom code.
+
+### DEPENDENCIES
+
+This kata requires that I create code that can determine all of the
+dependencies of a initial "key".  By all, this means all of the dependencies
+of each dependency and so on down the chain.  Essentially, this is an exercise
+in turning a graph into a unique list of elements.
+
+The algorithm I used is to first get all of the dependencies into a single
+struct containing an associative array.  The add method takes a key and an
+array of all it's dependencies.  The get method will first initialize an
+assiciative array with all of the direct dependencies for the current key.
+Then, for every dependency, I keep digging down into their dependencies until
+I add no more dependencies.
+
+It's an O(n^2) algorithm, therefore not terribly efficient, but good enough
+for the small data set I was working with.  Not really sure how to better do
+this as there's the issue of circular dependencies, so graph traversal
+algorithms become problematic unless you have a good way of detecting circular
+dependencies, though perhaps the same solution I used for detecting duplicates
+would work.
+
+### KLONDIKE
+
+This was the most complicated and difficult of the katas.  It wasn't because I
+didn't know the game because, well, I've played it enough.  The issue was the
+fact I probably should have spent more time planning than I did.  I just kept
+getting hit by bugs that could have been solved if I just took the time to
+design the algorithm.
+
+This exercise was also a learning experience because I initially started with
+standard arrays, however they proved to be too memory inefficient.  Not 100%
+sure why, but it's probably in part due to the fact that D doesn't have a good
+garbage collector yet.  However, this was worked around by using the Array
+collection in the standard library.  It doesn't work exactly the same, but
+it's close enough that it's a directly replacement in many cases.  In the
+cases where it isn't, there's usually a simple change to be made.
+
+The one case where it wasn't a simple change was when I tried to test the
+equality of my structs.  Initially, I overrode the built-in equals operator so
+I could use the `==` operator to do the comparisons.  However, for some
+reason, when using the Array collection, didn't like this, so I changed it to
+an `equals` method and changed the normal calls to use this method.
+Inconvenient, but it worked.
+
+I also got to take advantage of CTFE (Compile Time Function Execution) to
+generate the initial deck.  Granted, I had to write the code to generate the
+deck, but it was much less tedious than having to manually create the deck.
+
+Overall, the code works as it should, though the algorithm for playing the
+game is too simple and doesn't do very well.  Testing it against 100,000 games
+results in 0 wins, so I'm not very happy with the results.  With more time,
+I'm sure I can come up with a better algorithm, which is a side goal of the
+kata, however I did accomplish the kata's primary goal, which is what I was
+trying to accomplish.  The good news is that a significant portion of the
+program should not require any refactoring, so it's just a matter of coming up
+with better playing strategies.  However, before doing so, this needs to be
+broken out into separate modules.  This wasn't done earlier because I didn't
+think it was necessary initially, however it's now grown to the point where I
+don't want to work in such a large file.  (875 lines)
+
+### LISTS
+
+In this kata, I was to create three types of lists: a singly linked list, a
+doubly linked list, and a list that did not involve the use of pointers.  The
+first two were very easy because I could simply uses classes for the nodes.
+I wish I could have used structs, but it's probably quite infeasible to use
+them since they are allocated on the stack.  Removing arbitrary nodes would be
+very difficult.
+
+The third implementation uses an array to back the list where when adding new
+nodes, I would expand the list by twice it's length up to size_t max elements.
+The goal was to have a data structure that would allow for faster iteration.
+Also, inserts would be pretty fast as long as they don't require a resize.
+This was due to having the index of the last element stored at all times, so I
+always know where it is.  Removal of elements is slow as it required
+condensing the array to remove any holes.
+
+Here are some benchmarks to show performance of each solutions:
+
+* Benchmarking adds.
+  * Add1: 80376
+  * Add2: 13297
+  * Add3: 11665
+* Benchmarking finds.
+  * Find1: 73909
+  * Find2: 72968
+  * Find3: 56075
+
+Nothing surprising here.  Singly linked lists have to iterate over the entire
+list before adding an element, therefore they are the slowest.  As for
+searches, arrays are more compact in memory, therefore they are searched a bit
+faster.  I didn't do removes because I didn't figure out how to get a
+consistant data set across all of the runs without skewing the results due to
+the code for populating the lists.
+
+### SHOPPING_CART
+
+In this kata, the goal is to create a calculator of sorts where the price of
+the groceries is determined by a set of rules.  These rules specify the cost
+per item, but also special cost if there is one, such as 3 for $1.00.
+
+Nothing really tricky here.  If you see that with the new item you now have a
+multiple of the special amount (E.g. 3 if it's 3 for $1.00), then you subtract
+the cost of the 1 item fewer than the special (E.g. 2 items) and replace it
+with the special cost.
+
+### SORTING
+
+In this kata, two sorting routines were created without using the built-in
+sort routines.  First, sorting numbers by adding new numbers to a struct and
+getting back an array of the numbers in a sorted manner.  I used a simple
+binary tree for this, though in retrospect, a better data structure should be
+used for production systems so that you ensure the tree is balanced.
+
+The second sorting algorithm is to take a string and turn it into a string
+where all the letters are lower-case and in sorted order.  In this case, I
+just looped over each letter in the alphabet and as I found a letter in the
+strin gthat matched, I added it to a new array.  Not good for a large data
+set, but good enough for a simple string.
+
+### STRINGCALC
+
+This was a somewhat interesting kata as it was implemented in phases, each
+phase adding a new twist.  The goal is to create a calculator which accepts
+delimited string and adds up all of the values.  However, negative values are
+not allowed and the delimiter could be either the comma or a user-specified
+character that is specified at the beginning of the string.  E.g.: `//;\n1;2`
+
+The "\n" character is also a delimiter.  Delimiters can also be multiple
+characters.  So, what I did is I normalized all delimiters to either the comma
+or the specified delimiter, then split on it.  I then checked for negative
+values and throw an exception if one is found.  If not, I summed up all the
+values using a reduce method.
+
+### TRIGRAMS
+
+This was a fun kata.  The goal is to take a string, divide it up into
+trigrams, and create a new string using that trigram.  Nothing special
+from an algorithm standpoint as generating the new sting just requires a
+random number generator and iterating over the trigrams while randomly picking
+the next text until you hit a stopping point.  The real fun is just seeing the
+results.
+
+### WORD_CHAINS
+
+This was another fun, but somewhat difficult, kata where, given two words,
+come up with the shortest chain between the two words.  A lot of filtering was
+used to ensure we only looked at words that were the same size as the provided
+words and we didn't see the words before.
+
+The trick was not going too deep.  It was very easy to create extremely long
+chains of words which, if we were looking for the longest chain, would be
+useful.  However, since we were looking for the shortest, this was a waste of
+time and resources.  The trick is, since this is a recursive implementation,
+to ensure that the different between the current word and the last word is the
+same as the length of the word minus the depth.  For example, if we're looking
+at 3 letter words, cat and dog, then the next word after cat must be different
+from dog by only two characters.
+
+It took a while before I figured it out.  However, once I did, performance
+improved considerably.
