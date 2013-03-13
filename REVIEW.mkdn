@@ -279,7 +279,7 @@ in turning a graph into a unique list of elements.
 The algorithm I used is to first get all of the dependencies into a single
 struct containing an associative array.  The add method takes a key and an
 array of all it's dependencies.  The get method will first initialize an
-assiciative array with all of the direct dependencies for the current key.
+associative array with all of the direct dependencies for the current key.
 Then, for every dependency, I keep digging down into their dependencies until
 I add no more dependencies.
 
@@ -289,6 +289,37 @@ this as there's the issue of circular dependencies, so graph traversal
 algorithms become problematic unless you have a good way of detecting circular
 dependencies, though perhaps the same solution I used for detecting duplicates
 would work.
+
+### [FIZZBUZZ](http://www.codingdojo.org/cgi-bin/wiki.pl?KataFizzBuzz)
+
+This may be surprising, but I never did this one before.  I've known about it
+for a while, but never actually implemented it as, well, it's dirt simple.
+However, I decided to do it for fun and the referenced version makes it a
+little more interesting.
+
+Overall, the code is uninteresting except that since `isFizz` and `isBuzz`
+were so simple, I simply declared the methods using lambdas.
+
+Just for laughs and giggles, here's the core of the program:
+
+    void main()
+    {
+        foreach (i; 1..101)
+        {
+            writeln((isFizz(i) && isBuzz(i)) ? "FizzBuzz"
+                                             : isFizz(i) ? "Fizz"
+                                                         : isBuzz(i) ? "Buzz"
+                                                                     : text(i));
+        }
+    }
+
+    auto isFizz = (int a) => (a % 3 == 0) || (text(a).count("3") > 0);
+    auto isBuzz = (int a) => (a % 5 == 0) || (text(a).count("5") > 0);
+
+The hardest part was figuring out a tiny bug that I had in the program with
+the count method.  Normally, D is good about finding issues with data types,
+however in this case, I accidentally passed in the number 3 vs. the string
+"3", so it would never return the correct result.
 
 ### [KLONDIKE](http://codekata.pragprog.com/2007/01/kata_twenty_klo.html)
 
