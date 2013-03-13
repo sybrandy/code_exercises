@@ -30,6 +30,7 @@ used in production if, for some reason, someone decides to do so.
   which contains the map, filter, uniq, and sort methods amongst others.
 * The new syntax for lamdas is very nice and easy to use.  E.g.: `a => a.foo`
   or `(a,b) => a.equals(b)`
+* I really wish the std.log was available in D.
 
 ## Katas
 
@@ -57,6 +58,42 @@ words once vs. 1-3 times.
 
 The rest of the program looks to see how many anagrams exist in the dictionary
 as well as the longest set of anagrams and prints them out.
+
+### BANK_OCR
+
+In this task, numbers are read in from an "OCR" and transformed into strings
+that contain the translated number.  The data looks like this:
+
+        _  _     _  _  _  _  _
+      | _| _||_||_ |_   ||_||_|
+      ||_  _|  | _||_|  ||_| _|
+
+Simply reading them isn't enough as you also have to check to ensure the
+number is valid.  This is done via a simple checksum algorithm and ensuring
+that all of the "numbers" are valid numbers.  However, if there is an error with
+the number, then you have to try to automatically fix the number by checking
+each individual digit to see if it's off by one character in the original text.
+
+>Note: This is only done once per digit!  The text originally confused me as I
+thought that we needed to examine every possible error on every digit, but
+instead it's supposed to check the only first digit to see if it could be
+something else, then check only the second digit.  So, at most, each possible
+"fix" varies from the original string by one digit.  Needless to say, I
+initially had a large mount of "solutions".
+
+This was a fun little problem and a bit different.  I didn't deal with reading
+from an actual file and have a very ugly set of unit tests, but it works.  For
+fixing the number, I went with a recursive solution, though it could just as
+easily be done with an iterative solution.
+
+I did recycle the wordDiff function from the word_chains kata as it served the
+same purpose here, except instead of real words I'm examining a string of
+spaces, underscores, and/or pipes.  It is rewarding to see such methods being
+reused.
+
+Outside of that, nothing of interest.  It could use a bit of cleanup, especially
+to improve performance, but again, this was a very small data set, so it's fast
+enough.  Even then, I can't image when such a program would be necessary.
 
 ### BINARY_CHOP
 
