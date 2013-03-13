@@ -34,7 +34,7 @@ used in production if, for some reason, someone decides to do so.
 
 ## Katas
 
-### ANAGRAMS
+### [ANAGRAMS](http://codekata.pragprog.com/2007/01/kata_six_anagra.html)
 
 This was a very simple kata where the goal was to find all of the words that
 are anagrams to each other.  To do this, I created a dictionary to store the
@@ -59,7 +59,7 @@ words once vs. 1-3 times.
 The rest of the program looks to see how many anagrams exist in the dictionary
 as well as the longest set of anagrams and prints them out.
 
-### BANK_OCR
+### [BANK_OCR](http://www.codingdojo.org/cgi-bin/wiki.pl?KataBankOCR)
 
 In this task, numbers are read in from an "OCR" and transformed into strings
 that contain the translated number.  The data looks like this:
@@ -95,7 +95,7 @@ Outside of that, nothing of interest.  It could use a bit of cleanup, especially
 to improve performance, but again, this was a very small data set, so it's fast
 enough.  Even then, I can't image when such a program would be necessary.
 
-### BINARY_CHOP
+### [BINARY_CHOP](http://codekata.pragprog.com/2007/01/kata_two_karate.html)
 
 In this kata, the goal was to create 5 different versions of the binary
 search algorithm.  I ended up creating six.  Before we get into the algorithms
@@ -153,7 +153,7 @@ the search function once vs. many times, this should be much faster.
 Overall, this was a fun exercise.  I may come back to it later to try to
 improve some of the algorithms as benchmarking is fun.
 
-### BLOOM_FILTER
+### [BLOOM_FILTER](http://codekata.pragprog.com/2007/01/kata_five_bloom.html)
 
 This was another fun exercise.  First, though not part of the actual
 challenge, D lets you perform a word-count on a file with only one word per
@@ -181,7 +181,7 @@ if they are exist or not.  It also checks the original dictionary to verify
 that the word is a real word.  The final result is the number of hits against
 the filter as well as the number of false positives.
 
-### CONCAT_WORDS
+### [CONCAT_WORDS](http://codekata.pragprog.com/2007/01/kata_eight_conf.html)
 
 In this kata, the goal was to create three versions of same algorithm to
 concatenate 2, 3, and 4 letter words into real 6 letter words.  One version is
@@ -225,7 +225,7 @@ the word sizes would be, I could make some assumptions with respect to the
 algorithm to improve performance which, in this case, is pretty significant
 even if you discount the third version.
 
-### DATA_MUNGING
+### [DATA_MUNGING](http://codekata.pragprog.com/2007/01/kata_four_data_.html)
 
 This was a two-part kata where two different solutions were created and then
 refactored to leverage as much code between the two as possible.  In D, this
@@ -269,7 +269,7 @@ efficient solution.  The data set was very small, so no benchmarks were
 performed.  It may be interesting to see how this would work with a larger
 data set vs. more custom code.
 
-### DEPENDENCIES
+### [DEPENDENCIES](http://codekata.pragprog.com/2007/01/kata_eighteen_t.html)
 
 This kata requires that I create code that can determine all of the
 dependencies of a initial "key".  By all, this means all of the dependencies
@@ -290,7 +290,7 @@ algorithms become problematic unless you have a good way of detecting circular
 dependencies, though perhaps the same solution I used for detecting duplicates
 would work.
 
-### KLONDIKE
+### [KLONDIKE](http://codekata.pragprog.com/2007/01/kata_twenty_klo.html)
 
 This was the most complicated and difficult of the katas.  It wasn't because I
 didn't know the game because, well, I've played it enough.  The issue was the
@@ -329,7 +329,7 @@ broken out into separate modules.  This wasn't done earlier because I didn't
 think it was necessary initially, however it's now grown to the point where I
 don't want to work in such a large file.  (875 lines)
 
-### LISTS
+### [LISTS](http://codekata.pragprog.com/2007/01/kata_twenty_one.html)
 
 In this kata, I was to create three types of lists: a singly linked list, a
 doubly linked list, and a list that did not involve the use of pointers.  The
@@ -364,7 +364,7 @@ faster.  I didn't do removes because I didn't figure out how to get a
 consistant data set across all of the runs without skewing the results due to
 the code for populating the lists.
 
-### SHOPPING_CART
+### [SHOPPING_CART](http://codekata.pragprog.com/2007/01/kata_nine_back_.html)
 
 In this kata, the goal is to create a calculator of sorts where the price of
 the groceries is determined by a set of rules.  These rules specify the cost
@@ -375,7 +375,7 @@ multiple of the special amount (E.g. 3 if it's 3 for $1.00), then you subtract
 the cost of the 1 item fewer than the special (E.g. 2 items) and replace it
 with the special cost.
 
-### SORTING
+### [SORTING](http://codekata.pragprog.com/2007/01/kata_eleven_sor.html)
 
 In this kata, two sorting routines were created without using the built-in
 sort routines.  First, sorting numbers by adding new numbers to a struct and
@@ -389,7 +389,15 @@ just looped over each letter in the alphabet and as I found a letter in the
 strin gthat matched, I added it to a new array.  Not good for a large data
 set, but good enough for a simple string.
 
-### STRINGCALC
+### [STRINGCALC](http://osherove.com/tdd-kata-1/)
+
+>Note: I can't remember where I originally got this from, but the link
+provided does describe the kata, just with more variations than I handled.
+The original version I looked at didn't have parts 6, 8, and 9.  Also, part 7
+was a little different in that the delimiter didn't have to be in square
+brackets.  Perhaps sone day I'll go back and complete this version, but for
+now, I consider this task complete.  One person also suggested doing this
+without conditional statements, so perhaps I'll try that as well.
 
 This was a somewhat interesting kata as it was implemented in phases, each
 phase adding a new twist.  The goal is to create a calculator which accepts
@@ -403,7 +411,7 @@ or the specified delimiter, then split on it.  I then checked for negative
 values and throw an exception if one is found.  If not, I summed up all the
 values using a reduce method.
 
-### TRIGRAMS
+### [TRIGRAMS](http://codekata.pragprog.com/2007/01/kata_fourteen_t.html)
 
 This was a fun kata.  The goal is to take a string, divide it up into
 trigrams, and create a new string using that trigram.  Nothing special
@@ -412,7 +420,7 @@ random number generator and iterating over the trigrams while randomly picking
 the next text until you hit a stopping point.  The real fun is just seeing the
 results.
 
-### WORD_CHAINS
+### [WORD_CHAINS](http://codekata.pragprog.com/2007/01/kata_nineteen_w.html)
 
 This was another fun, but somewhat difficult, kata where, given two words,
 come up with the shortest chain between the two words.  A lot of filtering was
