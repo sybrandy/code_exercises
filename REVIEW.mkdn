@@ -321,6 +321,42 @@ the count method.  Normally, D is good about finding issues with data types,
 however in this case, I accidentally passed in the number 3 vs. the string
 "3", so it would never return the correct result.
 
+So, since it was so straight-forward the first time, I decided to generate an
+alternative solution using OO, specifically a factory method and inheritance.
+It's much more verbose, but it does illustrate how it can be done pretty
+easily.  I won't go too far into whether it's better or not as one can go on
+the internet to find out, however if I were to abstract out the original
+solution into it's own function, that would be the cleanest and perhaps best
+approach.
+
+As for other approaches, I simply can't think of any.  At least none that are
+significant in any way.  I could use if statements vs. the ternary operator,
+but that accomplishes the same thing, just more verbose.  I could use a swtich
+statement and have a method return a value of 0-3 or an enum, but that's just
+making the original solution more complex than needed.  The OO solution is
+already there, but I just did it for illustration purposes.  That, and I
+wanted to try to come up with something else.
+
+However, D does have an interesting concept called a range where I can create
+a data structure that can be iterated on by simply providing a specific set of
+methods.  There's more to it than that, but for the sake of this example,
+that's all that we really need to know.  While it too is more verbose than the
+original version, this is perhaps the most useful version since it can be used
+anywhere a range can be used, such as with most of the methods in
+std.algorithm and std.range as well as foreach loops.
+
+Benchmarks indicate that all of the solutions are about the same in terms of
+performance.  The original version is the fastest followed by the range
+version and lastly, the object oriented version.  However, this only reflects
+a single run.  Other runs have shown that the OO version is faster than the
+range version, so expecting one to be consistently faster is not recommended.
+Regardless, I believe the range version is the preferable version due to it's
+flexibility.
+
+* Bench1: 2171414 -- Original
+* Bench2: 2358674 -- OO
+* Bench3: 2342891 -- Range
+
 ### [KLONDIKE](http://codekata.pragprog.com/2007/01/kata_twenty_klo.html)
 
 This was the most complicated and difficult of the katas.  It wasn't because I
@@ -469,3 +505,25 @@ from dog by only two characters.
 
 It took a while before I figured it out.  However, once I did, performance
 improved considerably.
+
+## My Katas
+
+### Most Recently Used
+
+Create a data structure using a doubly linked list to have the most recently
+used element be the first element.  Add code to periodically remove elements
+that are older than 10 seconds.  Provide a method to retrieve the top 10 most
+recently used entries.
+
+Rules:
+
+* Do not use any built-in data structures.
+* Provide a method to get all of the entries to be able to test that the
+  expiration happened correctly.
+* Consider the different between a clever solution where expiration occurs
+  during the insertion/update of a new value or using a second thread to
+  periodically remove expired data.
+
+After the initial version is created, create another version using a different
+data structure to see if insertion speed can be improved.  Provide benchmarks
+to show the speed improvements.
