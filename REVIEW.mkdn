@@ -504,6 +504,16 @@ after trying it out, in cases such as that one it is cleaner.  Unfortunately,
 if I have to modify it, I have to add the braces back in and reformat, but I
 think I like this form as long as I don't go nuts with it.
 
+### [ROMAN_CALCULATOR](http://www.codingdojo.org/cgi-bin/wiki.pl?KataRomanCalculator)
+
+I'm not going to code this one because after doing the Roman numeral
+calculator, I've done the bulk of the work, therefore all I really need to do
+is implement the basic operations (addition, subtraction, multiplication,
+division).  To really make this useful, I could parse the equation into a
+binary tree and then traverse the tree to do the calculations, but that's way
+beyong the kata since it only requires addition.  In that case, I could simply
+create a new struct for the "Roman Numbers" and overide the addition operator.
+
 ### [SHOPPING_CART](http://codekata.pragprog.com/2007/01/kata_nine_back_.html)
 
 In this kata, the goal is to create a calculator of sorts where the price of
