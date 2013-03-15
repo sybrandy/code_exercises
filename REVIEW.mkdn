@@ -431,6 +431,55 @@ faster.  I didn't do removes because I didn't figure out how to get a
 consistant data set across all of the runs without skewing the results due to
 the code for populating the lists.
 
+### [POTTER_BOOKS](http://www.codingdojo.org/cgi-bin/wiki.pl?KataPotter)
+
+In this kata, I had to create another shopping cart, but in this case it had
+to be a bit more intelligent.  Based on the set of books provided, I had to
+determine which was the cheapest way to apply the following discounts:
+
+* 5% off two different books.
+* 10% off three different books.
+* 20% off four different books.
+* 25% off five different books.
+
+So, for example, if I bought eight books, it would be cheaper to apply the 20%
+discount twice (4 and 4) vs. the 10% and the 25% (3 and 5).  This kata was
+also to be done iteratively to solve the simpler unit tests first, so that's
+what I did.
+
+The first few cases were quite easy:
+
+* If the array is empty, the cost is 0.
+* If the array has one element, then simply return the cost of one book.
+* If the array contains only 1 book multiple times, then simply multiply the
+  number of books by the cost.
+* If the books in the array are all unique, then apply the appropriate
+  discount.
+
+The last case is where it got tricky.  At first, it was pretty simple because
+I could simply generate sets of unique books while maintaining the number of
+each book in a separate array.  A book could only be part of the permutation
+if there were still instances of it left.  This solved all but the last case
+where the most straight-forward solution isn't the right one.
+
+After some thought, I came up with a solution where I would check various
+permutations to see which one provides the lowest cost.  You can look at the
+code to see the algorithm as I won't describe it here.  However, the part of
+interest is that I implemented it as a range.  This was very simple and
+integrated well with the rest of the code.
+
+The only other real change I had to make to the overall algorithm was when I
+got a unique set of books to try, I had to make sure that there were the same
+amount of books as required by the permutation.  If I didn't check that, I
+would get sets of books that didn't match the permutations.  This was seen
+where I had several copies of one book left, therefore I would get an array of
+1 book for the set of unique books.  Since this was associated with the last
+element in the permutations, it wouldn't take into account all of the
+remaining books, thus providing a lower score that was incorrect.  E.g.
+
+* Permutation: 5,5,5,3,3,3
+* Last set of unique books: [4] (Length == 1, not 3)
+
 ### [SHOPPING_CART](http://codekata.pragprog.com/2007/01/kata_nine_back_.html)
 
 In this kata, the goal is to create a calculator of sorts where the price of
