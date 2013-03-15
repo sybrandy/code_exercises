@@ -480,6 +480,30 @@ remaining books, thus providing a lower score that was incorrect.  E.g.
 * Permutation: 5,5,5,3,3,3
 * Last set of unique books: [4] (Length == 1, not 3)
 
+### [ROMAN_NUMERALS](http://www.codingdojo.org/cgi-bin/wiki.pl?KataRomanNumerals)
+
+Simple kata to convert to/from Roman numerals.  Converting to Roman numerals
+was more complicated than converting from them, but still pretty easy.  I used
+a straight-forward algorithm where every time a Roman numeral could be used, I
+added it to the string.  So, for the number 4, I would get "IIII".  Then, I
+did some post-processing to convert the various patterns that would result in
+something similar to "IV" to their correct forms.
+
+The other direction was very simple as I created an array of integers where,
+if the next value was greater than the previous value, I set the previous
+value to the new value minus the previous value.  I then summed all of the
+numbers together.
+
+For the first time in D, I wrote conditions on a single line if it could be
+done.  E.g.:
+
+    if (diff < 0) continue;
+
+Normally, I always wrap braces around the statements within the block, but
+after trying it out, in cases such as that one it is cleaner.  Unfortunately,
+if I have to modify it, I have to add the braces back in and reformat, but I
+think I like this form as long as I don't go nuts with it.
+
 ### [SHOPPING_CART](http://codekata.pragprog.com/2007/01/kata_nine_back_.html)
 
 In this kata, the goal is to create a calculator of sorts where the price of
