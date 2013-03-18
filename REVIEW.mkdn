@@ -467,6 +467,35 @@ faster.  I didn't do removes because I didn't figure out how to get a
 consistant data set across all of the runs without skewing the results due to
 the code for populating the lists.
 
+### POKER
+
+This is a combination of two Katas:
+
+* [Poker Hands](http://www.codingdojo.org/cgi-bin/wiki.pl?KataPokerHands)
+* [Texes Hold'em](http://www.codingdojo.org/cgi-bin/wiki.pl?KataTexasHoldEm)
+
+The first focuses on the various poker hands to determine who is the winner.
+None of the methods were complicated to create, but a good number were
+written.  All have unit tests, which is how I planned on testing the Kata.  In
+the original description, the goal was to read from a text file and determine
+who won, however since I was going to use the same code for the Texas Hold'em
+kata, I decied uinit tests were the way to go.
+
+I still went with the string format specified in the Kata as it made writing
+the various tests much easier.  I still used the Suit and CardValue enums from
+the Klondike kata with the change to put the Ace as the highest card.  Since I
+planned on working with the structs, I had to create a method to convert the
+string to the cards.  I also opted to sort the cards so that it was only done
+once vs. several times.
+
+To determine the hand, isntead of creating one method per hand, I created
+several methods that could be combined for some of the hands.  Others are
+still specific to a particular hand, but not many.  Overall, the simplicity
+and the conciceness of the functions is very good.  The one method I'd love
+to find a cleaner implementation for is handRank where I have one if statement
+per possible hand.  It seems less than ideal, but without pattern matching,
+like in functional programming, I'm not sure what else to do.
+
 ### [POTTER_BOOKS](http://www.codingdojo.org/cgi-bin/wiki.pl?KataPotter)
 
 In this kata, I had to create another shopping cart, but in this case it had
