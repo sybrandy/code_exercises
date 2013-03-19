@@ -6,6 +6,9 @@ import std.stdio;
 enum Suit { HEARTS, SPADES, DIAMONDS, CLUBS };
 enum CardValue { TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN,
                  JACK, QUEEN, KING, ACE };
+immutable string[9] ranks = ["Nothing", "Pair", "Two Pair", "Three of a Kind",
+                             "Straight", "Flush", "Full House",
+                             "Four of a Kind", "Straight Flush"];
 
 struct Card
 {

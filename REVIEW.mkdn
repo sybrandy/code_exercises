@@ -496,6 +496,30 @@ to find a cleaner implementation for is handRank where I have one if statement
 per possible hand.  It seems less than ideal, but without pattern matching,
 like in functional programming, I'm not sure what else to do.
 
+Now, the Texas Hold'em part of the kata was a bit more fun due to how
+frustrating it was to get a bit of code working right.  The issue is that with
+a set of 7 cards, what is the best hand you can get with those cards.  So,
+that means you have to try every permutation of the cards to see which is the
+best hand.  Us humans do this pretty well, but computers are a bit dumber,
+therefore we have to test each combination.
+
+> Note: I just realized that what is a combination I kept referring to in the
+> code as a permutation.  So, when reading the code: permuation ->
+> combination.
+
+So, my plan was to create all of the combinations at compile-time so I can
+simply iterate over them when I execute the program.  However, generating the
+correct combinations provied to be a bit trickier than I expected.  I always
+seemed to be off by a small flaw.  Turns out, all I had to do was turn some of
+my logic around and that took care of the issue.
+
+The rest of the code is pretty basic and uses the code that I wrote before.  I
+just ran it through the test case that was part of the kata description, so I
+didn't do much testing nor did I do all of the logic for determining the
+winner, such as resolving ties by looking for the high-card.  I solved it
+before for two players, so it's just a matter of extending it to several
+hands.
+
 ### [POTTER_BOOKS](http://www.codingdojo.org/cgi-bin/wiki.pl?KataPotter)
 
 In this kata, I had to create another shopping cart, but in this case it had
