@@ -467,6 +467,14 @@ faster.  I didn't do removes because I didn't figure out how to get a
 consistant data set across all of the runs without skewing the results due to
 the code for populating the lists.
 
+### [MINESWEEPER](http://www.codingdojo.org/cgi-bin/wiki.pl?KataMinesweeper)
+
+This kata was quite simple.  Not really much to say about this since it's very
+straight-forward.  Only cool feature used that hasn't been seen in the katas
+yet is using a static regex that's created at compile time.  This is nice
+because it's only compiled once instead of every time it's used or even when
+the program starts.
+
 ### POKER
 
 This is a combination of two Katas:
