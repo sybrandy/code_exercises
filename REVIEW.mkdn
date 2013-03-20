@@ -393,6 +393,17 @@ flexibility.
 * Bench2: 2358674 -- OO
 * Bench3: 2342891 -- Range
 
+### [CONWAYS GAME OF LIFE](http://www.codingdojo.org/cgi-bin/wiki.pl?KataGameOfLife)
+
+Another first, this kata is a basic implementation of Conway's Game of Life.
+I think I've looked at this before and it appears to be simpler than I recall.
+There's nothing really special about the code.  It was just fun.
+
+#### TODO
+
+* Create a version that runs through N iterations?  Need to find some sample
+  code that refreshes the screen.  ncurses?
+
 ### [KLONDIKE](http://codekata.pragprog.com/2007/01/kata_twenty_klo.html)
 
 This was the most complicated and difficult of the katas.  It wasn't because I
