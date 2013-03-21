@@ -774,6 +774,19 @@ from dog by only two characters.
 It took a while before I figured it out.  However, once I did, performance
 improved considerably.
 
+### [WORD WRAP](http://www.codingdojo.org/cgi-bin/wiki.pl?KataWordWrap)
+
+In this kata, we are to create some code that puts newlines into a string so
+that it wraps correctly at a specified number of columns.  Originally, this
+was dirt simple because I simply went back to the first space before the
+column to wrap at and replaced it with a newline.  However, this was
+unstatisfactory since there could be multiple spaces, so I had to rework the
+algorithm to handle that.  The hardest part was making sure that I indexed the
+arrays properly, specifically the new start to the sub-string I was pulling
+from the input.  Overall, not too bad since I only used two arrays: the input
+string and the char array in the function.  Granted, I created a new string
+when I returned the string version of the output, but that's to be expected.
+
 ## My Katas
 
 ### Most Recently Used
