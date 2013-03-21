@@ -95,6 +95,11 @@ It's a slow algorithm from an algorithmic standpoint, however it ran very fast
 on my VM.  It's O(n^5).  I'm sure there may be a better algorithm.  I just
 haven't thought of it yet.
 
+#### TODO
+
+* Try to find an algorithm that doesn't run in 0(n^5) time.  Perhaps look into
+  using a different type of data structure?
+
 ### [BANK_OCR](http://www.codingdojo.org/cgi-bin/wiki.pl?KataBankOCR)
 
 In this task, numbers are read in from an "OCR" and transformed into strings
@@ -129,7 +134,7 @@ reused.
 
 Outside of that, nothing of interest.  It could use a bit of cleanup, especially
 to improve performance, but again, this was a very small data set, so it's fast
-enough.  Even then, I can't image when such a program would be necessary.
+enough.  Even then, I can't imagine when such a program would be necessary.
 
 ### [BINARY_CHOP](http://codekata.pragprog.com/2007/01/kata_two_karate.html)
 
@@ -188,6 +193,12 @@ the search function once vs. many times, this should be much faster.
 
 Overall, this was a fun exercise.  I may come back to it later to try to
 improve some of the algorithms as benchmarking is fun.
+
+#### TODO
+
+* Go back and improve the last benchmark by spawning the search function once
+  before starting the benchmark.
+  * Perhaps do the same with a version using a fiber?
 
 ### [BLOOM_FILTER](http://codekata.pragprog.com/2007/01/kata_five_bloom.html)
 
@@ -261,6 +272,10 @@ the word sizes would be, I could make some assumptions with respect to the
 algorithm to improve performance which, in this case, is pretty significant
 even if you discount the third version.
 
+#### TODO
+
+* Look into the stack solution to improve performance of the flexible version.
+
 ### [DATA_MUNGING](http://codekata.pragprog.com/2007/01/kata_four_data_.html)
 
 This was a two-part kata where two different solutions were created and then
@@ -304,6 +319,12 @@ The only aspect of this code that is unknown is whether this is also an
 efficient solution.  The data set was very small, so no benchmarks were
 performed.  It may be interesting to see how this would work with a larger
 data set vs. more custom code.
+
+#### TODO
+
+* Create a larger data set for one of the programs and try to determine if a
+  faster solution can be created.
+  * Create the data set using another program.
 
 ### [DEPENDENCIES](http://codekata.pragprog.com/2007/01/kata_eighteen_t.html)
 
@@ -442,6 +463,13 @@ with better playing strategies.  However, before doing so, this needs to be
 broken out into separate modules.  This wasn't done earlier because I didn't
 think it was necessary initially, however it's now grown to the point where I
 don't want to work in such a large file.  (875 lines)
+
+#### TODO
+
+* Create more unit tests.
+* Work on a better algorithm.  Need to work this out on paper as there are
+  probably 20,000 different ones, so need to pick and choose.
+  * Try to stick with incremental improvements.
 
 ### [LISTS](http://codekata.pragprog.com/2007/01/kata_twenty_one.html)
 
@@ -588,6 +616,34 @@ remaining books, thus providing a lower score that was incorrect.  E.g.
 * Permutation: 5,5,5,3,3,3
 * Last set of unique books: [4] (Length == 1, not 3)
 
+### [DICTIONARY_REPLACER](http://www.codingdojo.org/cgi-bin/wiki.pl?KataDictionaryReplacer)
+
+In this kata, the goal was to create a simple string replacement method.  It
+was nothing special from a complexity standpoint, but I decided to take it up
+a notch by making it a bit smarter.  I did use the built-in replace method for
+arrays, but I tried to make the code smart by using a regex to find all of the
+tokens to replace, get a unique list of them, then do the replacments.  This
+way, for each token the replace method is only called once regardless of how
+many times it was captured by the regex.
+
+After re-reading the description, this seemed like a very lame way of doing
+it, so I created a second version that examined every character individually
+and, with a few simple rules, did the replacment inline.  If the character
+wasn't part of a string to be replaced, then it was simply appened to a new
+character array.  However, if it was, then after finding the end of the string
+to be replaced, then the replacement string was appended to the new character
+array.
+
+Amusingly, the second version crushes the first version in benchmarks (usecs).
+
+* Bench1: 15565
+* Bench2: 2177
+
+The lesson to be learned here is just because you have built-in tools to
+perform a task, it doesn't mean you should.  The only real advantage of the
+first version vs. the second version is it takes up fewer lines of code.
+Other than that, there is no real advantage.
+
 ### [REVERSI](http://www.codingdojo.org/cgi-bin/wiki.pl?KataReversi)
 
 Another very simple exercise.  Not much to this one as I did it in only the
@@ -629,6 +685,11 @@ binary tree and then traverse the tree to do the calculations, but that's way
 beyong the kata since it only requires addition.  In that case, I could simply
 create a new struct for the "Roman Numbers" and overide the addition operator.
 
+#### TODO
+
+* Create a full-fledged calculator.
+  * Support RPN?
+
 ### [SHOPPING_CART](http://codekata.pragprog.com/2007/01/kata_nine_back_.html)
 
 In this kata, the goal is to create a calculator of sorts where the price of
@@ -660,7 +721,7 @@ set, but good enough for a simple string.
 provided does describe the kata, just with more variations than I handled.
 The original version I looked at didn't have parts 6, 8, and 9.  Also, part 7
 was a little different in that the delimiter didn't have to be in square
-brackets.  Perhaps sone day I'll go back and complete this version, but for
+brackets.  Perhaps one day I'll go back and complete this version, but for
 now, I consider this task complete.  One person also suggested doing this
 without conditional statements, so perhaps I'll try that as well.
 
@@ -676,6 +737,10 @@ or the specified delimiter, then split on it.  I then checked for negative
 values and throw an exception if one is found.  If not, I summed up all the
 values using a reduce method.
 
+#### TODO
+
+* Follow the link and implement all aspects of the kata.
+
 ### [TRIGRAMS](http://codekata.pragprog.com/2007/01/kata_fourteen_t.html)
 
 This was a fun kata.  The goal is to take a string, divide it up into
@@ -684,6 +749,11 @@ from an algorithm standpoint as generating the new sting just requires a
 random number generator and iterating over the trigrams while randomly picking
 the next text until you hit a stopping point.  The real fun is just seeing the
 results.
+
+#### TODO
+
+* Update the code to work on larger sets of text.  Keep punctuation in mind.
+* May have to move beyond tri-grams to something larger.
 
 ### [WORD_CHAINS](http://codekata.pragprog.com/2007/01/kata_nineteen_w.html)
 
@@ -725,3 +795,12 @@ Rules:
 After the initial version is created, create another version using a different
 data structure to see if insertion speed can be improved.  Provide benchmarks
 to show the speed improvements.
+
+### Encryption
+
+Implement some basic encryption algorithms.  Some potential algorithms:
+
+* Caesar cipher
+* Viginere
+* Basic substitution
+* One time pad
