@@ -644,6 +644,34 @@ perform a task, it doesn't mean you should.  The only real advantage of the
 first version vs. the second version is it takes up fewer lines of code.
 Other than that, there is no real advantage.
 
+### MOST RECENTLY USED
+
+This is the first of my custom katas that I decided to work on.  It was nice
+as I had to truly work on getting the range interface to work.  While I did
+implement the InputRange properties, I'm not sure I needed to as it's probably
+not needed at all.  Of course, the front propery would probably be very
+useful, so I guess it was worth it.
+
+Now, this is based on the doubly-linked list implementation I created before.
+Because of how the inserts need to work, there were a number of changes to be
+made.  I did keep the find method as it is useful for finding an element in
+the list in the event that the element being added is already in the list.  I
+also kept the values method as it is very useful for debugging/unit testing.
+
+Now, I considered the last of the rules and came to the conclusion that having
+some sort of timer call the "clear" method is probably the best method.  My
+thought is that while it would be cleaner to do it when calling the put
+function, it would also slow things down considerably especially if a large
+number of values are inserted very rapidly.  Granted, the removal process
+should be pretty efficient since it starts at the end and stops removing
+elements when it finds one that doesn't need to be removed.  However, it can
+add up quickly.
+
+#### TODO
+
+* Finish the kata by trying a different data structure to improve insertion
+  speed.
+
 ### [REVERSI](http://www.codingdojo.org/cgi-bin/wiki.pl?KataReversi)
 
 Another very simple exercise.  Not much to this one as I did it in only the
@@ -801,13 +829,14 @@ Rules:
 * Do not use any built-in data structures.
 * Provide a method to get all of the entries to be able to test that the
   expiration happened correctly.
-* Consider the different between a clever solution where expiration occurs
+* Consider the difference between a clever solution where expiration occurs
   during the insertion/update of a new value or using a second thread to
   periodically remove expired data.
 
 After the initial version is created, create another version using a different
 data structure to see if insertion speed can be improved.  Provide benchmarks
-to show the speed improvements.
+to show the speed improvements.  Also, show benchmarks related to getting the
+top values or the first value.
 
 ### Encryption
 
