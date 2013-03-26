@@ -276,6 +276,17 @@ even if you discount the third version.
 
 * Look into the stack solution to improve performance of the flexible version.
 
+### [CONWAYS GAME OF LIFE](http://www.codingdojo.org/cgi-bin/wiki.pl?KataGameOfLife)
+
+Another first, this kata is a basic implementation of Conway's Game of Life.
+I think I've looked at this before and it appears to be simpler than I recall.
+There's nothing really special about the code.  It was just fun.
+
+#### TODO
+
+* Create a version that runs through N iterations?  Need to find some sample
+  code that refreshes the screen.  ncurses?
+
 ### [DATA_MUNGING](http://codekata.pragprog.com/2007/01/kata_four_data_.html)
 
 This was a two-part kata where two different solutions were created and then
@@ -347,6 +358,34 @@ algorithms become problematic unless you have a good way of detecting circular
 dependencies, though perhaps the same solution I used for detecting duplicates
 would work.
 
+### [DICTIONARY_REPLACER](http://www.codingdojo.org/cgi-bin/wiki.pl?KataDictionaryReplacer)
+
+In this kata, the goal was to create a simple string replacement method.  It
+was nothing special from a complexity standpoint, but I decided to take it up
+a notch by making it a bit smarter.  I did use the built-in replace method for
+arrays, but I tried to make the code smart by using a regex to find all of the
+tokens to replace, get a unique list of them, then do the replacments.  This
+way, for each token the replace method is only called once regardless of how
+many times it was captured by the regex.
+
+After re-reading the description, this seemed like a very lame way of doing
+it, so I created a second version that examined every character individually
+and, with a few simple rules, did the replacment inline.  If the character
+wasn't part of a string to be replaced, then it was simply appened to a new
+character array.  However, if it was, then after finding the end of the string
+to be replaced, then the replacement string was appended to the new character
+array.
+
+Amusingly, the second version crushes the first version in benchmarks (usecs).
+
+* Bench1: 15565
+* Bench2: 2177
+
+The lesson to be learned here is just because you have built-in tools to
+perform a task, it doesn't mean you should.  The only real advantage of the
+first version vs. the second version is it takes up fewer lines of code.
+Other than that, there is no real advantage.
+
 ### [FIZZBUZZ](http://www.codingdojo.org/cgi-bin/wiki.pl?KataFizzBuzz)
 
 This may be surprising, but I never did this one before.  I've known about it
@@ -413,17 +452,6 @@ flexibility.
 * Bench1: 2171414 -- Original
 * Bench2: 2358674 -- OO
 * Bench3: 2342891 -- Range
-
-### [CONWAYS GAME OF LIFE](http://www.codingdojo.org/cgi-bin/wiki.pl?KataGameOfLife)
-
-Another first, this kata is a basic implementation of Conway's Game of Life.
-I think I've looked at this before and it appears to be simpler than I recall.
-There's nothing really special about the code.  It was just fun.
-
-#### TODO
-
-* Create a version that runs through N iterations?  Need to find some sample
-  code that refreshes the screen.  ncurses?
 
 ### [KLONDIKE](http://codekata.pragprog.com/2007/01/kata_twenty_klo.html)
 
@@ -513,6 +541,47 @@ straight-forward.  Only cool feature used that hasn't been seen in the katas
 yet is using a static regex that's created at compile time.  This is nice
 because it's only compiled once instead of every time it's used or even when
 the program starts.
+
+### MOST RECENTLY USED
+
+This is the first of my custom katas that I decided to work on.  It was nice
+as I had to truly work on getting the range interface to work.  While I did
+implement the InputRange properties, I'm not sure I needed to as it's probably
+not needed at all.  Of course, the front propery would probably be very
+useful, so I guess it was worth it.
+
+Now, this is based on the doubly-linked list implementation I created before.
+Because of how the inserts need to work, there were a number of changes to be
+made.  I did keep the find method as it is useful for finding an element in
+the list in the event that the element being added is already in the list.  I
+also kept the values method as it is very useful for debugging/unit testing.
+
+Now, I considered the last of the rules and came to the conclusion that having
+some sort of timer call the "clear" method is probably the best method.  My
+thought is that while it would be cleaner to do it when calling the put
+function, it would also slow things down considerably especially if a large
+number of values are inserted very rapidly.  Granted, the removal process
+should be pretty efficient since it starts at the end and stops removing
+elements when it finds one that doesn't need to be removed.  However, it can
+add up quickly.
+
+Looking up some more information, partucullaryl the Wikipedia page for a
+[Self-Organizing List](https://en.wikipedia.org/wiki/Self-organizing_list), I
+noticed that I only considered one particular use case.  I think this is fine
+for the initial exercise, though it does seem to confirm that my original data
+structure is the best one for the job.  The article is also an interesting
+read with regards to different use cases and different algorithms.
+
+In this case, I think it's done correctly.  With the range interface, every
+time I do something with a value, I can "put" the value into the list and have
+it be the most current item.  I can also see what the 10 most recently used
+items are.
+
+The only other change to be considered is checking the length of the list on
+every insert and if the size of the lists exceeds a max size, we drop the last
+element.  This would keep the size in check, but not elminate the need for the
+clear method as if there is a significant amount of time between updates, then
+elements within those top N elements would need to be removed as well.
 
 ### POKER
 
@@ -616,68 +685,27 @@ remaining books, thus providing a lower score that was incorrect.  E.g.
 * Permutation: 5,5,5,3,3,3
 * Last set of unique books: [4] (Length == 1, not 3)
 
-### [DICTIONARY_REPLACER](http://www.codingdojo.org/cgi-bin/wiki.pl?KataDictionaryReplacer)
-
-In this kata, the goal was to create a simple string replacement method.  It
-was nothing special from a complexity standpoint, but I decided to take it up
-a notch by making it a bit smarter.  I did use the built-in replace method for
-arrays, but I tried to make the code smart by using a regex to find all of the
-tokens to replace, get a unique list of them, then do the replacments.  This
-way, for each token the replace method is only called once regardless of how
-many times it was captured by the regex.
-
-After re-reading the description, this seemed like a very lame way of doing
-it, so I created a second version that examined every character individually
-and, with a few simple rules, did the replacment inline.  If the character
-wasn't part of a string to be replaced, then it was simply appened to a new
-character array.  However, if it was, then after finding the end of the string
-to be replaced, then the replacement string was appended to the new character
-array.
-
-Amusingly, the second version crushes the first version in benchmarks (usecs).
-
-* Bench1: 15565
-* Bench2: 2177
-
-The lesson to be learned here is just because you have built-in tools to
-perform a task, it doesn't mean you should.  The only real advantage of the
-first version vs. the second version is it takes up fewer lines of code.
-Other than that, there is no real advantage.
-
-### MOST RECENTLY USED
-
-This is the first of my custom katas that I decided to work on.  It was nice
-as I had to truly work on getting the range interface to work.  While I did
-implement the InputRange properties, I'm not sure I needed to as it's probably
-not needed at all.  Of course, the front propery would probably be very
-useful, so I guess it was worth it.
-
-Now, this is based on the doubly-linked list implementation I created before.
-Because of how the inserts need to work, there were a number of changes to be
-made.  I did keep the find method as it is useful for finding an element in
-the list in the event that the element being added is already in the list.  I
-also kept the values method as it is very useful for debugging/unit testing.
-
-Now, I considered the last of the rules and came to the conclusion that having
-some sort of timer call the "clear" method is probably the best method.  My
-thought is that while it would be cleaner to do it when calling the put
-function, it would also slow things down considerably especially if a large
-number of values are inserted very rapidly.  Granted, the removal process
-should be pretty efficient since it starts at the end and stops removing
-elements when it finds one that doesn't need to be removed.  However, it can
-add up quickly.
-
-#### TODO
-
-* Finish the kata by trying a different data structure to improve insertion
-  speed.
-
 ### [REVERSI](http://www.codingdojo.org/cgi-bin/wiki.pl?KataReversi)
 
 Another very simple exercise.  Not much to this one as I did it in only the
 main function in just over 50 lines of code.  (Allman-style makes code more
 longer)  I did create the output visually as suggested only because it was
 pretty easy.
+
+### [ROMAN_CALCULATOR](http://www.codingdojo.org/cgi-bin/wiki.pl?KataRomanCalculator)
+
+I'm not going to code this one because after doing the Roman numeral
+calculator, I've done the bulk of the work, therefore all I really need to do
+is implement the basic operations (addition, subtraction, multiplication,
+division).  To really make this useful, I could parse the equation into a
+binary tree and then traverse the tree to do the calculations, but that's way
+beyong the kata since it only requires addition.  In that case, I could simply
+create a new struct for the "Roman Numbers" and overide the addition operator.
+
+#### TODO
+
+* Create a full-fledged calculator.
+  * Support RPN?
 
 ### [ROMAN_NUMERALS](http://www.codingdojo.org/cgi-bin/wiki.pl?KataRomanNumerals)
 
@@ -702,21 +730,6 @@ Normally, I always wrap braces around the statements within the block, but
 after trying it out, in cases such as that one it is cleaner.  Unfortunately,
 if I have to modify it, I have to add the braces back in and reformat, but I
 think I like this form as long as I don't go nuts with it.
-
-### [ROMAN_CALCULATOR](http://www.codingdojo.org/cgi-bin/wiki.pl?KataRomanCalculator)
-
-I'm not going to code this one because after doing the Roman numeral
-calculator, I've done the bulk of the work, therefore all I really need to do
-is implement the basic operations (addition, subtraction, multiplication,
-division).  To really make this useful, I could parse the equation into a
-binary tree and then traverse the tree to do the calculations, but that's way
-beyong the kata since it only requires addition.  In that case, I could simply
-create a new struct for the "Roman Numbers" and overide the addition operator.
-
-#### TODO
-
-* Create a full-fledged calculator.
-  * Support RPN?
 
 ### [SHOPPING_CART](http://codekata.pragprog.com/2007/01/kata_nine_back_.html)
 
@@ -768,6 +781,7 @@ values using a reduce method.
 #### TODO
 
 * Follow the link and implement all aspects of the kata.
+* Try to write a version that doesn't use conditionals.
 
 ### [TRIGRAMS](http://codekata.pragprog.com/2007/01/kata_fourteen_t.html)
 
@@ -844,5 +858,6 @@ Implement some basic encryption algorithms.  Some potential algorithms:
 
 * Caesar cipher
 * Viginere
+* Autokey Cipher
 * Basic substitution
 * One time pad
