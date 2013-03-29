@@ -386,6 +386,30 @@ perform a task, it doesn't mean you should.  The only real advantage of the
 first version vs. the second version is it takes up fewer lines of code.
 Other than that, there is no real advantage.
 
+### ENCRYPTION
+
+This is another one of my personal katas.  It was just an exercise in creating
+small encryption algorithms, most of which aren't very secure.
+
+Theree as nothing too interesting about the exercise except that if you look
+at the first three algorithms, they are all related.  For example, the
+Viginere algorithm leveages the doShift method from the Caesar cipher since
+Viginere is based on Caesar.  Autokey is then based on Viginere, which
+resulted in a very short encryption method (two lines), however due to how the
+algorithm worked, I needed to create a new decription method.
+
+Some other notes:
+
+* Starting with the Caesar cipher, I refactored code to make it more concise.
+  I may have been able to do more of that with the others, but there's so
+  little complexity, it didn't really matter too much.
+* Used structs to "scope" the methods as I wanted everything in one file for
+  simplicity for the exercise, but wanted to ensure that I didn't have to do
+  any weird naming to make it work.
+* Still have no idea how to convert a string to a binary array (ubyte[])
+  properly.  Perhaps I could have created my own, but I was hoping that
+  std.conv would have something that would be regarded as correct.
+
 ### [FIZZBUZZ](http://www.codingdojo.org/cgi-bin/wiki.pl?KataFizzBuzz)
 
 This may be surprising, but I never did this one before.  I've known about it
@@ -838,7 +862,7 @@ In this kata, we are to create some code that puts newlines into a string so
 that it wraps correctly at a specified number of columns.  Originally, this
 was dirt simple because I simply went back to the first space before the
 column to wrap at and replaced it with a newline.  However, this was
-unstatisfactory since there could be multiple spaces, so I had to rework the
+unsatisfactory since there could be multiple spaces, so I had to rework the
 algorithm to handle that.  The hardest part was making sure that I indexed the
 arrays properly, specifically the new start to the sub-string I was pulling
 from the input.  Overall, not too bad since I only used two arrays: the input
