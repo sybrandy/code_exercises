@@ -565,7 +565,7 @@ should be pretty efficient since it starts at the end and stops removing
 elements when it finds one that doesn't need to be removed.  However, it can
 add up quickly.
 
-Looking up some more information, partucullaryl the Wikipedia page for a
+Looking up some more information, particularly the Wikipedia page for a
 [Self-Organizing List](https://en.wikipedia.org/wiki/Self-organizing_list), I
 noticed that I only considered one particular use case.  I think this is fine
 for the initial exercise, though it does seem to confirm that my original data
@@ -579,9 +579,25 @@ items are.
 
 The only other change to be considered is checking the length of the list on
 every insert and if the size of the lists exceeds a max size, we drop the last
-element.  This would keep the size in check, but not elminate the need for the
+element.  This would keep the size in check, but not eliminate the need for the
 clear method as if there is a significant amount of time between updates, then
 elements within those top N elements would need to be removed as well.
+
+### [PARENTHESIS](http://www.programthis.net/parentheses-matching)
+
+This was in interesting little kata where the goal is to generate every
+possible way N pairs of parenthesis can be nested.  It's a problem that is
+done more easily in a recursive fashion than an iterative one as I tried to
+come up with a way to do it iteratively, but I just didn't see a way to do it
+cleanly.
+
+Now, my original thought I think was polluted by the first solution at the
+bottom of the page, so I tried to do something similar, but it didn't get all
+possible scenarios and ended up with a lot of duplicate data.  I got close
+with 4 parenthesis, but once I figured out which one was missing, I realized
+the whole algorithm was wrong.  I ended up using a character buffer and added
+a single parenthesis at a time.  This worked much better, though it did take
+some conditional logic.
 
 ### POKER
 
@@ -595,7 +611,7 @@ None of the methods were complicated to create, but a good number were
 written.  All have unit tests, which is how I planned on testing the Kata.  In
 the original description, the goal was to read from a text file and determine
 who won, however since I was going to use the same code for the Texas Hold'em
-kata, I decied uinit tests were the way to go.
+kata, I decided unit tests were the way to go.
 
 I still went with the string format specified in the Kata as it made writing
 the various tests much easier.  I still used the Suit and CardValue enums from
@@ -604,10 +620,10 @@ planned on working with the structs, I had to create a method to convert the
 string to the cards.  I also opted to sort the cards so that it was only done
 once vs. several times.
 
-To determine the hand, isntead of creating one method per hand, I created
+To determine the hand, instead of creating one method per hand, I created
 several methods that could be combined for some of the hands.  Others are
 still specific to a particular hand, but not many.  Overall, the simplicity
-and the conciceness of the functions is very good.  The one method I'd love
+and the conciseness of the functions is very good.  The one method I'd love
 to find a cleaner implementation for is handRank where I have one if statement
 per possible hand.  It seems less than ideal, but without pattern matching,
 like in functional programming, I'm not sure what else to do.
@@ -620,7 +636,7 @@ best hand.  Us humans do this pretty well, but computers are a bit dumber,
 therefore we have to test each combination.
 
 > Note: I just realized that what is a combination I kept referring to in the
-> code as a permutation.  So, when reading the code: permuation ->
+> code as a permutation.  So, when reading the code: permutation ->
 > combination.
 
 So, my plan was to create all of the combinations at compile-time so I can
