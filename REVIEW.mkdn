@@ -410,6 +410,13 @@ Some other notes:
   properly.  Perhaps I could have created my own, but I was hoping that
   std.conv would have something that would be regarded as correct.
 
+> UPDATE: I added some code to perform  quick-check like testing against the
+> encryption functions.  This found a bug with my substitution algorithm that
+> I didn't have a unit test for.  It also worked very well ensuring that my
+> tests are passing 100% of the time...so far.  The library is not part of
+> this as I need to separate it out, but it does provide additional proof that
+> it works.
+
 ### [FIZZBUZZ](http://www.codingdojo.org/cgi-bin/wiki.pl?KataFizzBuzz)
 
 This may be surprising, but I never did this one before.  I've known about it
