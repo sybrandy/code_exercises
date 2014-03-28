@@ -2,7 +2,7 @@ import std.algorithm;
 import std.exception;
 import std.file;
 import std.stdio;
-import std.string : icmp, toLower;
+import std.string : icmp, toLower, indexOf;
 
 void main(string[] args)
 {
@@ -24,7 +24,7 @@ void main(string[] args)
 
     writeln("Number of words: ", dict.length);
 
-    int longest;
+    ulong longest;
     int numAnagrams;
     string[] longestVals;
     foreach (key, vals; anagrams)
