@@ -310,7 +310,7 @@ program, one for football (soccer) data and the other for weather data.
             .findMinDiff(rec);
     writefln("Team %s, Spread %d", rec.id, rec.diff);
 
-***
+**
 
     Record!(uint) rec;
     File("weather.dat").byLine()
