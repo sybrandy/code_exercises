@@ -3,7 +3,7 @@ import std.array;
 import std.exception;
 import std.file;
 import std.stdio;
-import std.string : icmp, toLower;
+import std.string : icmp, toLower, indexOf;
 
 immutable string currWord = "documenting";
 static bool[char] wordDict;
