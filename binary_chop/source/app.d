@@ -11,7 +11,7 @@ import core.thread;
 
 // First version, use a simple loop.
 pure nothrow
-int chop1(int val, int[] values)
+long chop1(long val, long[] values)
 {
     if (values.length == 1 && values[0] == val)
     {
@@ -19,8 +19,8 @@ int chop1(int val, int[] values)
     }
     else if (values.length > 1)
     {
-        int index = values.length / 2;
-        int maxIndex = values.length - 1;
+        long index = values.length / 2;
+        long maxIndex = values.length - 1;
         while(index >= 0)
         {
             if (values[index] == val)
@@ -33,13 +33,13 @@ int chop1(int val, int[] values)
             }
             else if (values[index] < val)
             {
-                int temp = ((maxIndex - index) / 2);
+                long temp = ((maxIndex - index) / 2);
                 index += (temp > 0) ? temp : 1;
             }
             else
             {
                 maxIndex = index;
-                int temp = index / 2;
+                long temp = index / 2;
                 index -= (temp > 0) ? temp : 1;
             }
         }
@@ -51,7 +51,7 @@ int chop1(int val, int[] values)
 // Second version: create a version that accepts the index to check as a
 // parameter, then recursively call the method.
 pure nothrow
-int chop2(int val, int[] values)
+long chop2(long val, long[] values)
 {
     if (values.length < 1)
     {
@@ -67,15 +67,15 @@ int chop2(int val, int[] values)
 }
 
 pure nothrow
-int doChop2(int val, int[] values, int start, int end)
+long doChop2(long val, long[] values, long start, long end)
 {
     if (start > end)
     {
         return -1;
     }
 
-    int diff = end - start;
-    int index = (diff != 1)
+    long diff = end - start;
+    long index = (diff != 1)
               ? start + (diff / 2)
               : start;
     if (values[index] == val)
@@ -94,7 +94,7 @@ int doChop2(int val, int[] values, int start, int end)
 
 // Third version: use array slices and recursion.
 pure nothrow
-int chop3(int val, int[] values)
+long chop3(long val, long[] values)
 {
     if (values.length == 1 && values[0] == val)
     {
@@ -105,7 +105,7 @@ int chop3(int val, int[] values)
         return -1;
     }
 
-    int index = values.length / 2;
+    long index = values.length / 2;
     if (values[index] == val)
     {
         return index;
@@ -116,13 +116,13 @@ int chop3(int val, int[] values)
     }
     else
     {
-        int retVal = chop3(val, values[index..$]);
+        long retVal = chop3(val, values[index..$]);
         return (retVal >= 0) ? retVal + index : retVal;
     }
 }
 
 // Fourth version: In this version, we use fibers to do the checks.
-int chop4(int val, int[] values)
+long chop4(long val, long[] values)
 {
     ChopFiber cf = new ChopFiber(val, values);
     cf.call();
@@ -131,11 +131,11 @@ int chop4(int val, int[] values)
 
 class ChopFiber: Fiber
 {
-    int index = -1;
-    int val;
-    int[] values;
+    long index = -1;
+    long val;
+    long[] values;
 
-    this(int _val, int[] _values)
+    this(long _val, long[] _values)
     {
         this.val = _val;
         this.values = _values.dup;
@@ -154,7 +154,7 @@ class ChopFiber: Fiber
         }
         else
         {
-            int index = this.values.length / 2;
+            long index = this.values.length / 2;
             if (this.values[index] == this.val)
             {
                 this.index = index;
@@ -177,7 +177,7 @@ class ChopFiber: Fiber
 
 // Fifth version: In this version, we use threads to do the checks
 // concurrently.
-int chop5(int val, int[] values)
+long chop5(long val, long[] values)
 {
     ChopThread ct = new ChopThread(val, values);
     ct.start();
@@ -187,11 +187,11 @@ int chop5(int val, int[] values)
 
 class ChopThread: Thread
 {
-    int index = -1;
-    int val;
-    int[] values;
+    long index = -1;
+    long val;
+    long[] values;
 
-    this(int _val, int[] _values)
+    this(long _val, long[] _values)
     {
         this.val = _val;
         this.values = _values.dup;
@@ -210,7 +210,7 @@ class ChopThread: Thread
         }
         else
         {
-            int index = this.values.length / 2;
+            long index = this.values.length / 2;
             if (this.values[index] == this.val)
             {
                 this.index = index;
@@ -238,11 +238,11 @@ void spawnChop(Tid tid)
 {
     receive
     (
-        (int val, immutable(int)[] values)
+        (long val, immutable(long)[] values)
         {
-            int index = values.length / 2;
-            int maxIndex = values.length - 1;
-            int retVal = -1;
+            long index = values.length / 2;
+            long maxIndex = values.length - 1;
+            long retVal = -1;
             while(index >= 0)
             {
                 if (values[index] == val)
@@ -256,13 +256,13 @@ void spawnChop(Tid tid)
                 }
                 else if (values[index] < val)
                 {
-                    int temp = ((maxIndex - index) / 2);
+                    long temp = ((maxIndex - index) / 2);
                     index += (temp > 0) ? temp : 1;
                 }
                 else
                 {
                     maxIndex = index;
-                    int temp = index / 2;
+                    long temp = index / 2;
                     index -= (temp > 0) ? temp : 1;
                 }
             }
@@ -271,7 +271,7 @@ void spawnChop(Tid tid)
     );
 }
 
-int chop6(int val, int[] values)
+long chop6(long val, long[] values)
 {
     if (values.length == 0)
     {
@@ -285,11 +285,11 @@ int chop6(int val, int[] values)
     {
         auto tid = spawn(&spawnChop, thisTid);
         send(tid, val, values.idup);
-        return receiveOnly!(int);
+        return receiveOnly!(long);
     }
 }
 
-void testChop(int function(int, int[]) chop)
+void testChop(long function(long, long[]) chop)
 {
     assert(-1 == chop(3, []));
     assert(-1 == chop(3, [1]));
@@ -312,8 +312,8 @@ void testChop(int function(int, int[]) chop)
     assert(-1 == chop(8, [1, 3, 5, 7]));
 }
 
-immutable int dataSize = 1000000;
-int[dataSize] data;
+immutable long dataSize = 1000000;
+long[dataSize] data;
 
 void main()
 {
@@ -324,15 +324,15 @@ void main()
     testChop(&chop5);
     testChop(&chop6);
 
-    for (int i = 0; i < dataSize; i++)
+    for (long i = 0; i < dataSize; i++)
     {
         data[i] = i;
     }
 
     auto r = benchmark!(bench1, bench2, bench3, bench4, bench5, bench6)(100);
-    for (int i = 0; i < 6; i++)
+    for (long i = 0; i < 6; i++)
     {
-        writefln("Bench%d: %d", i+1, r[i].to!("usecs", int));
+        writefln("Bench%d: %d", i+1, r[i].to!("usecs", long));
     }
 }
 
