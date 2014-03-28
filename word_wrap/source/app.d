@@ -27,7 +27,7 @@ string wrapper(string input, int col)
         diff = inStart - newStart;
     }
 
-    int remaining = input.length - inStart;
+    ulong remaining = input.length - inStart;
     newString[newStart..(newStart + remaining)] = input[inStart..$];
     return newString[0..($-diff)].idup;
 }
