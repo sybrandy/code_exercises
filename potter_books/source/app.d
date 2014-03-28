@@ -9,7 +9,7 @@ void main()
 immutable double bookCost = 8.0;
 immutable double[4] discounts = [.05, .10, .20, .25];
 
-double price(int[] books)
+double price(long[] books)
 {
     double cost = 0.0;
     if (books.length == 0)
@@ -33,8 +33,8 @@ double price(int[] books)
     }
     else
     {
-        int[] uniqBooks = books.uniq.array;
-        int[5] bookCounts;
+        long[] uniqBooks = books.uniq.array;
+        long[5] bookCounts;
         foreach (b; uniqBooks)
         {
             bookCounts[b] = books.count(b);
@@ -42,11 +42,11 @@ double price(int[] books)
 
         foreach (p; Permutation(books.length, uniqBooks.length))
         {
-            int[] currCounts = bookCounts.dup;
+            long[] currCounts = bookCounts.dup;
             double tempCost = 0.0;
-            for (int i = 0; i < p.length; i++)
+            for (long i = 0; i < p.length; i++)
             {
-                int[] currBooks;
+                long[] currBooks;
                 foreach (b; uniqBooks)
                 {
                     if (currCounts[b])
@@ -116,18 +116,18 @@ unittest
 
 struct Permutation
 {
-    private int numElems;
-    private int maxElems;
-    private int[] permutation;
+    private long numElems;
+    private long maxElems;
+    private long[] permutation;
 
-    this(int a, int b)
+    this(long a, long b)
     {
         numElems = a;
         maxElems = b;
         permute();
     }
 
-    @property int[] front()
+    @property long[] front()
     {
         return permutation.dup;
     }
@@ -157,9 +157,9 @@ struct Permutation
                     the array and subtract 1 from the element with the
                     hightest index that is > 1.
              */
-            int[] currPerm = permutation.dup;
-            int smallestIndex = currPerm.length - 1;
-            for (int i = currPerm.length - 2; i >= 0; i--)
+            long[] currPerm = permutation.dup;
+            long smallestIndex = currPerm.length - 1;
+            for (long i = currPerm.length - 2; i >= 0; i--)
             {
                 if (currPerm[i] != currPerm[smallestIndex])
                 {
@@ -168,8 +168,8 @@ struct Permutation
                 smallestIndex = i;
             }
 
-            int diffIndex = -1;
-            for (int i = smallestIndex - 1; i >= 0; i--)
+            long diffIndex = -1;
+            for (long i = smallestIndex - 1; i >= 0; i--)
             {
                 if ((currPerm[i] - currPerm[smallestIndex]) > 1)
                 {
@@ -186,7 +186,7 @@ struct Permutation
             else
             {
                 currPerm ~= 1;
-                for (int i = currPerm.length - 2; i >= 0; i--)
+                for (long i = currPerm.length - 2; i >= 0; i--)
                 {
                     if ((currPerm[i] - 1) > 0)
                     {
@@ -200,7 +200,7 @@ struct Permutation
         }
         else
         {
-            int sum;
+            long sum;
             while (sum != numElems)
             {
                 if ((numElems - sum) > maxElems)
@@ -210,7 +210,7 @@ struct Permutation
                 }
                 else
                 {
-                    int diff = numElems - sum;
+                    long diff = numElems - sum;
                     permutation ~= diff;
                     sum += diff;
                 }
@@ -233,7 +233,7 @@ unittest
 
     /*
     p = Permutation(23, 5);
-    for (int i = 0; i < 12; i++)
+    for (long i = 0; i < 12; i++)
     {
         writeln(p.front);
         p.popFront();
