@@ -293,7 +293,7 @@ struct ArrayList(T)
     // Delete a value from the list.
     void remove(ArrayNode!(T) node)
     {
-        for (int i = node.index; i < index; i++)
+        for (long i = node.index; i < index; i++)
         {
             vals[i] = (i+1) < vals.length ? vals[i+1] : null;
         }
