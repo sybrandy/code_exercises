@@ -95,6 +95,9 @@ It's a slow algorithm from an algorithmic standpoint, however it ran very fast
 on my VM.  It's O(n^5).  I'm sure there may be a better algorithm.  I just
 haven't thought of it yet.
 
+> On at least Debian, the american wordlist is:
+> /usr/share/dict/american-english
+
 #### TODO
 
 * Try to find an algorithm that doesn't run in 0(n^5) time.  Perhaps look into
