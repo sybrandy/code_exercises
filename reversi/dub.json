@@ -1,0 +1,8 @@
+{
+	"name": "reversi",
+	"description": "A minimal D application.",
+	"copyright": "Copyright © 2014, dev",
+	"authors": ["dev"],
+	"dependencies": {
+	}
+}
