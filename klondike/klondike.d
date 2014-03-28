@@ -144,13 +144,15 @@ void main()
 
             if (play1(pile, foundations, tableau))
             {
-                writeln("Won!");
+                /*writeln("Won!");*/
                 numWins["play1"]++;
             }
+            /*
             else
             {
                 writeln("Lost...");
             }
+            */
         }
 
         foreach (k; numWins.keys.sort)
