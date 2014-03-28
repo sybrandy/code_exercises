@@ -62,7 +62,7 @@ string[][] getChains(in bool[string] prev, in string start, in string end,
     bool[string] newPrev = cast(bool[string])prev.dup;
     newPrev[start] = false;
     /*writeln("New Prev: ", newPrev);*/
-    int endDiff = end.length - depth;
+    ulong endDiff = end.length - depth;
 
     // Only look at words that we haven't seen yet, are different from the
     // first word by one character, and are differnet from the end word by N
