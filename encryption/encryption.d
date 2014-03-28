@@ -13,14 +13,14 @@ void main()
 // TODO: Use DQC to improve testing of the various encryption algorithms.
 struct Caesar
 {
-    static dchar doShift(dchar c, uint shift)
+    static dchar doShift(dchar c, ulong shift)
     {
         return isAlpha(c)
              ?  c = ((c - 97 + shift) % 26) + 97
              : c;
     }
 
-    static string enc(string pt, uint shift)
+    static string enc(string pt, ulong shift)
     in
     {
         assert(shift >= 0 && shift <= 26);
@@ -30,9 +30,9 @@ struct Caesar
         return to!(string)(pt.toLower.map!(a => doShift(a, shift)).array());
     }
 
-    static string dec(string ct, uint shift)
+    static string dec(string ct, ulong shift)
     {
-        uint newShift = 26 - shift;
+        ulong newShift = 26 - shift;
         return enc(ct, newShift);
     }
 }
@@ -46,18 +46,18 @@ unittest
     assert(Caesar.dec(Caesar.enc("ABCDEFG", 5), 5) == "abcdefg");
     assert(Caesar.dec(Caesar.enc("How are things going?", 5), 5) == "how are things going?");
 
-    bool testCaesar(string data, uint shift)
+    bool testCaesar(string data, ulong shift)
     {
-        uint currShift = shift % 26;
+        ulong currShift = shift % 26;
         return Caesar.dec(Caesar.enc(data, currShift), currShift) == data.toLower;
     }
 
-    checkMany!(testCaesar, 100, 1000)(&genData!string, &genData!uint);
+    checkMany!(testCaesar, 100, 1000)(&genData!string, &genData!ulong);
 }
 
 struct Viginere
 {
-    static int getShift(string key, int keyIdx)
+    static ulong getShift(string key, ulong keyIdx)
     {
         return (key.dup)[keyIdx] - 96;
     }
@@ -71,12 +71,12 @@ struct Viginere
     body
     {
         auto ct = appender!(char[]);
-        int keyIdx = 0;
+        ulong keyIdx = 0;
         foreach (c; pt.toLower.dup)
         {
             if (isAlpha(c))
             {
-                int shift = getShift(key, keyIdx);
+                ulong shift = getShift(key, keyIdx);
                 ct.put(Caesar.doShift(c, shift));
                 keyIdx = (keyIdx + 1) % key.length;
             }
@@ -97,12 +97,12 @@ struct Viginere
     body
     {
         auto pt = appender!(char[]);
-        int keyIdx = 0;
+        ulong keyIdx = 0;
         foreach (c; ct.toLower.dup)
         {
             if (isAlpha(c))
             {
-                int shift = 26 - getShift(key, keyIdx);
+                ulong shift = 26 - getShift(key, keyIdx);
                 pt.put(Caesar.doShift(c, shift));
                 keyIdx = (keyIdx + 1) % key.length;
             }
@@ -156,12 +156,12 @@ struct Autokey
     {
         auto pt = appender!(char[]);
         dchar[] newKey = to!(dchar[])(key);
-        int keyIdx = 0;
+        long keyIdx = 0;
         foreach (c; ct.toLower.dup)
         {
             if (isAlpha(c))
             {
-                int shift = 26 - (newKey[keyIdx++] - 96);
+                long shift = 26 - (newKey[keyIdx++] - 96);
                 dchar pc = Caesar.doShift(c, shift);
                 pt.put(pc);
                 newKey ~= pc;
@@ -246,7 +246,7 @@ unittest
     assert(Sub.dec(Sub.enc("abcdefg", key), key) == "abcdefg");
     assert(Sub.dec(Sub.enc("ABCDEFG", key), key) == "abcdefg");
 
-    char[char] randomKey(uint seed, size_t length = 0)
+    char[char] randomKey(ulong seed, size_t length = 0)
     {
         Random gen = Random(seed);
         bool[char] values;
@@ -283,7 +283,7 @@ struct OTP
             throw new Exception("Message and key must be the same length!");
         }
 
-        for (int i = 0; i < msg.length; i++)
+        for (long i = 0; i < msg.length; i++)
         {
             output[i] = msg[i] ^ key[i];
         }
