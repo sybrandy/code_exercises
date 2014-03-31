@@ -197,12 +197,6 @@ the search function once vs. many times, this should be much faster.
 Overall, this was a fun exercise.  I may come back to it later to try to
 improve some of the algorithms as benchmarking is fun.
 
-#### TODO
-
-* Go back and improve the last benchmark by spawning the search function once
-  before starting the benchmark.
-  * Perhaps do the same with a version using a fiber?
-
 ### [BLOOM_FILTER](http://codekata.pragprog.com/2007/01/kata_five_bloom.html)
 
 This was another fun exercise.  First, though not part of the actual
