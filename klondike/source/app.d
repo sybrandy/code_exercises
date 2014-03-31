@@ -30,8 +30,8 @@ struct Card
 struct Move
 {
     Card[] cards;
-    ulong fromStack;
-    ulong toStack;
+    long fromStack;
+    long toStack;
     bool toFoundation;
     bool newCard;
     bool fromPile;
@@ -86,7 +86,7 @@ pure Card[52] createDeck()
     Card[52] deck;
     foreach (suit; [Suit.HEARTS, Suit.SPADES, Suit.DIAMONDS, Suit.CLUBS])
     {
-        ulong offset = suit * 13;
+        long offset = suit * 13;
         foreach (value; [ CardValue.ACE, CardValue.TWO, CardValue.THREE,
                           CardValue.FOUR, CardValue.FIVE, CardValue.SIX,
                           CardValue.SEVEN, CardValue.EIGHT, CardValue.NINE,
@@ -109,11 +109,11 @@ void main()
     }
     else
     {
-        ulong[string] numWins = ["play1":0];
-        ulong numTries = 100000;
+        long[string] numWins = ["play1":0];
+        long numTries = 100000;
         Array!(Card)[4] foundations;
         Array!(Card)[6] tableau;
-        /*ulong i = 18;*/
+        /*long i = 18;*/
         for (int i = 0; i < numTries; i++)
         {
             Array!(Card) currDeck = shuffle(i);
@@ -171,9 +171,9 @@ Array!(Card) shuffle(int seed)
     Array!(Card) cards;
 
     cards.length = 52;
-    for (ulong setCards = 0; setCards < cards.length; )
+    for (long setCards = 0; setCards < cards.length; )
     {
-        ulong nextCard = uniform(0, cards.length, gen);
+        long nextCard = uniform(0, cards.length, gen);
         if (!seen[nextCard])
         {
             cards[setCards] = deck[nextCard];
@@ -186,12 +186,12 @@ Array!(Card) shuffle(int seed)
 
 Array!(Card) deal(Array!(Card) localDeck, ref Array!(Card)[6] tableau)
 {
-    ulong count;
+    long count;
     Array!(Card) rest;
     debug { printCards(localDeck, "localDeck"); }
-    for (ulong i = 0, start = 0; start < 6; start++)
+    for (long i = 0, start = 0; start < 6; start++)
     {
-        for (ulong j = start; j < 6; j++, i++)
+        for (long j = start; j < 6; j++, i++)
         {
             Card temp = localDeck[count++];
             if (start == j) temp.visible = true;
@@ -219,7 +219,7 @@ bool validPlace(Card top, Card bottom)
 
     if ((bottom.value - top.value) != 1)
     {
-        /*writeln("Values too far apart: ", cast(ulong)(bottom.value - top.value));*/
+        /*writeln("Values too far apart: ", cast(long)(bottom.value - top.value));*/
         return false;
     }
     return true;
@@ -262,8 +262,8 @@ bool play1(Array!(Card) inPile, Array!(Card)[4] inFoundations, Array!(Card)[6] i
     Array!Move moves;
     bool gameLost;
     bool gameWon;
-    ulong numMoves;
-    ulong pileIdx;
+    long numMoves;
+    long pileIdx;
 
     while (!gameLost && !gameWon)
     {
@@ -407,8 +407,8 @@ bool repeatMoves(Array!(Move) moves)
         return false;
     }
 
-    ulong prevIndex;
-    for (ulong i = moves.length - 2; i > 0; i--)
+    long prevIndex;
+    for (long i = moves.length - 2; i > 0; i--)
     {
         if (lastMove.equals(moves[i]))
         {
@@ -417,7 +417,7 @@ bool repeatMoves(Array!(Move) moves)
         }
     }
 
-    ulong diff = moves.length - prevIndex - 1;
+    long diff = moves.length - prevIndex - 1;
     debug
     {
         writeln("Set of moves: ", moves[prevIndex+1..$]);
@@ -427,13 +427,13 @@ bool repeatMoves(Array!(Move) moves)
         writeln("Diff: ", diff);
     }
 
-    ulong lastIndex = moves.length - 1;
-    for (ulong i = prevIndex; i > 0; i--)
+    long lastIndex = moves.length - 1;
+    for (long i = prevIndex; i > 0; i--)
     {
         if (moves[i].equals(lastMove) && prevIndex >= diff)
         {
-            ulong numEqual;
-            for (ulong j = lastIndex; j > prevIndex; j--)
+            long numEqual;
+            for (long j = lastIndex; j > prevIndex; j--)
             {
                 debug
                 {
@@ -544,11 +544,11 @@ unittest
 void moveCardsToFoundation(ref Array!(Card)[6] tableau, ref Array!(Card)[4] foundations,
                            ref Array!(Move) moves)
 {
-    ulong numMoves = 1;
+    long numMoves = 1;
     while (numMoves > 0)
     {
         numMoves = 0;
-        for (ulong i = 0; i < tableau.length; i++)
+        for (long i = 0; i < tableau.length; i++)
         {
             bool cardMoved = false;
             if (tableau[i].length == 0)
@@ -559,7 +559,7 @@ void moveCardsToFoundation(ref Array!(Card)[6] tableau, ref Array!(Card)[4] foun
             if (tableau[i][$-1].value == CardValue.ACE)
             {
                 debug(fine) { writeln("Found an ACE!"); }
-                for (ulong j = 0; j < foundations.length; j++)
+                for (long j = 0; j < foundations.length; j++)
                 {
                     if (foundations[j].length == 0)
                     {
@@ -571,8 +571,8 @@ void moveCardsToFoundation(ref Array!(Card)[6] tableau, ref Array!(Card)[4] foun
             }
             else
             {
-                debug(fine) { writeln("Checking other cards."); }
-                for (ulong j = 0; j < foundations.length; j++)
+                debug(fine) { writeln("Checking other cards. Line: ", __LINE__); }
+                for (long j = 0; j < foundations.length; j++)
                 {
                     if (foundations[j].length == 0)
                     {
@@ -610,7 +610,7 @@ void moveCardsToFoundation(ref Array!(Card)[6] tableau, ref Array!(Card)[4] foun
 
 void moveCardsInTableau(ref Array!(Card)[6] tableau, ref Array!(Move) moves)
 {
-    ulong numMoves = 1;
+    long numMoves = 1;
     while (numMoves > 0)
     {
         debug(stats)
@@ -619,7 +619,7 @@ void moveCardsInTableau(ref Array!(Card)[6] tableau, ref Array!(Move) moves)
             writeln("Length of tableau: ", tableau.length);
         }
         numMoves = 0;
-        for (ulong i = 0; i < tableau.length; i++)
+        for (long i = 0; i < tableau.length; i++)
         {
             debug(fine){ writeln("Current i: ", i); }
             if (tableau[i].length == 0 || tableau[i][0].value == CardValue.KING)
@@ -627,7 +627,7 @@ void moveCardsInTableau(ref Array!(Card)[6] tableau, ref Array!(Move) moves)
                 continue;
             }
 
-            ulong cardIndex = tableau[i].length - 1;
+            long cardIndex = tableau[i].length - 1;
             debug(fine){ writeln("Initial cardIndex: ", cardIndex); }
             while (cardIndex > 0)
             {
@@ -642,7 +642,7 @@ void moveCardsInTableau(ref Array!(Card)[6] tableau, ref Array!(Move) moves)
             }
             debug(fine){ writeln("New cardIndex: ", cardIndex); }
 
-            for (ulong j = tableau.length - 1; j >= 0; j--)
+            for (long j = tableau.length - 1; j >= 0; j--)
             {
                 debug(fine)
                 {
@@ -710,8 +710,8 @@ void moveCardsInTableau(ref Array!(Card)[6] tableau, ref Array!(Move) moves)
 void moveStackCards(ref Array!Card stack, ref Array!(Card)[6] tableau,
                     ref Array!(Card)[4] foundations, ref Array!(Move) moves)
 {
-    ulong stackIdx = stack.length;
-    ulong numMoves = 1;
+    long stackIdx = stack.length;
+    long numMoves = 1;
 
     while (numMoves > 0 && stackIdx > 0)
     {
@@ -723,7 +723,7 @@ void moveStackCards(ref Array!Card stack, ref Array!(Card)[6] tableau,
         if (stack[stackIdx].value == CardValue.ACE)
         {
             debug(fine) { writeln("Found an ACE!"); }
-            for (ulong j = 0; j < foundations.length; j++)
+            for (long j = 0; j < foundations.length; j++)
             {
                 if (foundations[j].length == 0)
                 {
@@ -735,8 +735,8 @@ void moveStackCards(ref Array!Card stack, ref Array!(Card)[6] tableau,
         }
         else
         {
-            debug(fine) { writeln("Checking other cards."); }
-            for (ulong j = 0; j < foundations.length; j++)
+            debug(fine) { writeln("Checking other cards. Line: ", __LINE__); }
+            for (long j = 0; j < foundations.length; j++)
             {
                 if (foundations[j].length == 0)
                 {
@@ -763,7 +763,7 @@ void moveStackCards(ref Array!Card stack, ref Array!(Card)[6] tableau,
         }
         else
         {
-            for (ulong j = tableau.length - 1; j >= 0; j--)
+            for (long j = tableau.length - 1; j >= 0; j--)
             {
                 if (tableau[j].length == 0 &&
                     stack[stackIdx].value != CardValue.KING)
@@ -773,8 +773,12 @@ void moveStackCards(ref Array!Card stack, ref Array!(Card)[6] tableau,
                 debug(fine)
                 {
                     writeln("Current j: ", j);
+                    writeln("Tableau length: ", tableau[j].length);
                     writeln(stack[stackIdx]);
-                    writeln(tableau[j][$-1]);
+                    if (tableau[j].length > 0)
+                    {
+                        writeln(tableau[j][$-1]);
+                    }
                 }
                 if ((tableau[j].length == 0 &&
                      stack[stackIdx].value == CardValue.KING) ||
@@ -807,7 +811,7 @@ debug
     void printCards(Array!(Card)[] cards, string name)
     {
         writeln(name.capitalize);
-        for (ulong i = 0; i < cards.length; i++)
+        for (long i = 0; i < cards.length; i++)
         {
             writeln("Row ", i);
             foreach (c; cards[i])
@@ -848,21 +852,6 @@ debug
         writeln();
     }
 
-    void printMove(Move m)
-    {
-        writeln("Move:");
-        writeln("\tCards: ", m.cards);
-        writeln("\tFrom stack: ", m.fromStack);
-        writeln("\tTo stack: ", m.toStack);
-        writeln("\tTo foundation: ", m.toFoundation);
-        writeln("\tNew Card: ", m.newCard);
-        writeln("\tFrom pile: ", m.fromPile);
-        writeln("\tRestart pile: ", m.restartPile);
-    }
-}
-
-debug(fine)
-{
     void printMove(Move m)
     {
         writeln("Move:");
