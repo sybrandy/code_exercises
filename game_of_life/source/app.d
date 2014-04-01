@@ -1,4 +1,6 @@
+import std.conv;
 import std.exception;
+import std.getopt;
 import std.file;
 import std.regex;
 import std.stdio;
@@ -9,9 +11,17 @@ enum dimRegex = ctRegex!(r"^(\d+)\s(\d+)$");
 void main(string[] args)
 {
     char[][] map;
-    enforce(exists(args[1]));
+    string filename;
+    int generations = 5;
 
-    foreach (line; File(args[1]).byLine)
+    getopt(
+        args,
+        "generations|g", &generations,
+        "filename|f", &filename
+    );
+    enforce(exists(filename));
+
+    foreach (line; File(filename).byLine)
     {
         auto m = match(line, dimRegex);
         if (!m)
@@ -20,19 +30,20 @@ void main(string[] args)
         }
     }
 
-    char[][] newMap = updateMap(map);
-
-    // Output the new map.
-    writeln("Prev. Generation: ");
+    writeln("Generation 0:");
     foreach (line; map)
     {
         writeln(line);
     }
 
-    writeln("\nNew Generation: ");
-    foreach (line; newMap)
+    foreach (int g; 1..generations)
     {
-        writeln(line);
+        map = updateMap(map);
+        writefln("\nGeneration %d: ", g);
+        foreach (line; map)
+        {
+            writeln(line);
+        }
     }
 }
 
