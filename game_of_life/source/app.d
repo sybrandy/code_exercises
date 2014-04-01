@@ -49,12 +49,10 @@ void main(string[] args)
 
 char[][] updateMap(char[][] map)
 {
-    char[][] newMap;
+    char[][] newMap = map.dup;
     int numLive;
-    newMap.length = map.length;
     for (int i = 0; i < map.length; i++)
     {
-        newMap[i].length = map[i].length;
         for (int j = 0; j < map[i].length; j++)
         {
             newMap[i][j] = '.';
