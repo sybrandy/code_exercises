@@ -273,7 +273,7 @@ even if you discount the third version.
 
 * Look into the stack solution to improve performance of the flexible version.
 
-### [CONWAYS GAME OF LIFE](http://www.codingdojo.org/cgi-bin/wiki.pl?KataGameOfLife)
+### [CONWAYS GAME OF LIFE](http://www.codingdojo.org/cgi-bin/index.pl?KataGameOfLife)
 
 Another first, this kata is a basic implementation of Conway's Game of Life.
 I think I've looked at this before and it appears to be simpler than I recall.
