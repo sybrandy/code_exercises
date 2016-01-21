@@ -1,7 +1,7 @@
 *
-**/.dub
 !.gitignore
 !*.mkdn
 !*/
 !**/source/*.d
 !**/dub.json
+**/.dub/
