@@ -5,3 +5,4 @@
 !**/source/*.d
 !**/dub.json
 **/.dub/
+!advent*/**/input
