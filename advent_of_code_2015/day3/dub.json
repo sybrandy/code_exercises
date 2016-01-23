@@ -1,0 +1,9 @@
+{
+	"name": "day3",
+	"description": "A minimal D application.",
+	"copyright": "Copyright © 2014, dev",
+	"authors": ["dev"],
+    "dflags-dmd": ["-J."],
+	"dependencies": {
+	}
+}
