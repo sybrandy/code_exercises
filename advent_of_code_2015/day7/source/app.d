@@ -22,24 +22,15 @@ struct Wire
 void main()
 {
     Wire[string] wires;
-    /* foreach (i; sample.strip.split("\n")) */
-    foreach (i; buff.strip.split("\n"))
-    {
-        parseWire(wires, i);
-    }
+    /* sample.strip.split("\n").each!(a => parseWire(wires, a)); */
+    /* wires.keys.each!(i => writefln("%s - %d", i, getValue(wires, i))); */
+    buff.strip.split("\n").each!(a => parseWire(wires, a));
     writeln("Original value for wire A: ", getValue(wires, "a"));
 
     wires["b"].val = getValue(wires, "a");
-    foreach (i; wires.keys)
-    {
-        wires[i].isSet = false;
-    }
+    wires.keys.each!(a => wires[a].isSet = false);
     wires["b"].isSet = true;
     writeln("New value for wire A: ", getValue(wires, "a"));
-    /* foreach (i; wires.keys) */
-    /* { */
-    /*     writefln("%s - %d", i, getValue(wires, i)); */
-    /* } */
 }
 
 ushort getValue(ref Wire[string]wires, string key)
